@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '~/shared/shadcn/field';
 import { Input } from '~/shared/shadcn/input';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '~/shared/shadcn/input-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/shadcn/select';
 import { Button } from '~/shared/shadcn/button';
 import { Education } from '~/shared/enum';
@@ -71,16 +72,19 @@ export function RegistrationForm() {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className='gap-1 md:col-span-3'>
               <FieldLabel htmlFor='phoneNumber'>Nomor Telepon *</FieldLabel>
-              <Input
-                {...field}
-                id='phoneNumber'
-                type='number'
-                onChange={(e) => {
-                  field.onChange(e.target.value);
-                }}
-                aria-invalid={fieldState.invalid}
-                placeholder='Nomor WhatsApp aktif'
-              />
+              <InputGroup>
+                <InputGroupAddon className='text-black'>+62</InputGroupAddon>
+                <InputGroupInput
+                  {...field}
+                  id='phoneNumber'
+                  type='number'
+                  onChange={(e) => {
+                    field.onChange(e.target.value);
+                  }}
+                  aria-invalid={fieldState.invalid}
+                  placeholder='Nomor WhatsApp aktif'
+                />
+              </InputGroup>
               <FieldDescription>Nomor telepon/WhatsApp aktif.</FieldDescription>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
