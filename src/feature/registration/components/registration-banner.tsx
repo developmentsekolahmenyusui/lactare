@@ -13,15 +13,7 @@ const details = [
 
 export function RegistrationBanner() {
   return (
-    <section className='from-primary via-accent-foreground to-secondary relative overflow-hidden bg-linear-to-br text-white'>
-      <div
-        className='absolute inset-0 opacity-30'
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4), transparent 45%), radial-gradient(circle at 80% 0%, rgba(255,255,255,0.25), transparent 40%)',
-        }}
-        aria-hidden='true'
-      />
+    <section className='from-primary/60 via-primary to-primary/40 relative overflow-hidden bg-linear-to-br text-white'>
 
       <div className='relative z-10 px-6 py-10 sm:px-10'>
         <div className='flex flex-col items-center gap-6 text-center'>

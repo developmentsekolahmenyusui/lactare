@@ -5,7 +5,7 @@ export function RegistrationPage() {
   return (
     <div className='flex min-h-svh w-full items-center justify-center p-5 md:p-10'>
       <div className='w-full max-w-3xl'>
-        <div className='mx-auto w-full max-w-3xl overflow-hidden rounded-lg border bg-primary-foreground'>
+        <div className='mx-auto w-full max-w-3xl overflow-hidden rounded-lg border bg-white'>
           <RegistrationBanner />
           <RegistrationForm />
         </div>
