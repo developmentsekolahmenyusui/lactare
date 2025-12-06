@@ -8,7 +8,6 @@ const highlights = [
 
 const details = [
   { label: 'Batch', value: '18' },
-  { label: 'Format', value: 'Hybrid' },
   { label: 'Kuota', value: 'Terbatas' },
 ];
 

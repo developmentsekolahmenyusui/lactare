@@ -12,13 +12,6 @@ import { Education } from '~/shared/enum';
 export function RegistrationForm() {
   const form = useForm<RegistrationSchemaType>({
     resolver: zodResolver(RegistrationSchema as any),
-    defaultValues: {
-      fullName: '',
-      email: '',
-      certificateName: '',
-      lastEducation: '',
-      address: '',
-    },
   });
 
   const onSubmit = (data: RegistrationSchemaType) => {
