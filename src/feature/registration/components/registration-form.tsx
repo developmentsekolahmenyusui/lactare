@@ -17,7 +17,15 @@ import {
   StepFields,
   SubmitButton,
 } from '~/shared/shadcn/multi-step-viewer';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { BadgeCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const OPENING_BENEFITS = [
+  '5 kali kelas, dengan 30 sub-bab pengajaran',
+  '4 kali sesi konsultasi Dokter Obgyn dan Konselor Laktasi',
+  'Free materi persiapan newborn',
+  'Sertifikat untuk peserta yang mengikuti seluruh sesi',
+  'Community Group Whatsapp Ikatan Alumni Sekolah Menyusui.id dengan berbagai macam benefit seperti: kelas khusus alumni atau diskon produk',
+];
 
 export function RegistrationForm() {
   const form = useForm<RegistrationSchemaType>({
@@ -34,7 +42,21 @@ export function RegistrationForm() {
     {
       title: 'Pembukaan',
       fields: [],
-      component: <div className='w-full'>Opening</div>,
+      component: (
+        <div className='w-full space-y-4'>
+          <p className='text-foreground text-base font-medium'>
+            Manfaat yang akan Bunda dapatkan ketika mengikuti program ini:
+          </p>
+          <div className='text-muted-foreground w-full space-y-3 text-sm'>
+            {OPENING_BENEFITS.map((benefit) => (
+              <div key={benefit} className='flex items-start gap-3'>
+                <BadgeCheck className='text-primary size-5' />
+                <span className='w-full'>{benefit}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
     },
     {
       title: 'Data Peserta',
