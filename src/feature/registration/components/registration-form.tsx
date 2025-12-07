@@ -1,6 +1,7 @@
 'use client';
 
 import { RegistrationSchema, RegistrationSchemaType } from '../schema';
+import Image from 'next/image';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '~/shared/shadcn/field';
@@ -44,6 +45,16 @@ export function RegistrationForm() {
       fields: [],
       component: (
         <div className='w-full space-y-4 pb-4'>
+          <div className='border-primary/60 bg-primary/5 w-full rounded-xl border p-5 shadow-sm'>
+            <p className='text-primary text-xs font-semibold tracking-[0.25em] uppercase'>Investasi Program</p>
+            <div className='mt-2 flex flex-wrap items-end gap-2'>
+              <span className='text-foreground text-3xl leading-none font-bold'>Rp 169.000</span>
+              <span className='text-muted-foreground text-sm'>per peserta</span>
+            </div>
+            <p className='text-foreground mt-3 text-sm'>
+              Satu kali pembayaran untuk seluruh rangkaian kelas dan konsultasi premium Sekolah Menyusui.
+            </p>
+          </div>
           <p className='text-foreground text-base font-medium'>
             Manfaat yang akan Bunda dapatkan ketika mengikuti program ini:
           </p>
@@ -85,6 +96,7 @@ export function RegistrationForm() {
                   type='text'
                   onChange={(e) => {
                     field.onChange(e.target.value);
+                    form.setValue('fullName', e.target.value);
                   }}
                   aria-invalid={fieldState.invalid}
                   placeholder='Contoh: Siti Andini Pratiwi'
@@ -313,12 +325,34 @@ export function RegistrationForm() {
     {
       title: 'Konfirmasi',
       fields: [],
-      component: <div className='w-full'>Ending</div>,
+      component: (
+        <div className='w-full space-y-4'>
+          <div className='border-primary/60 bg-primary/5 w-full rounded-xl border p-5 shadow-sm'>
+            <p className='text-primary text-xs font-semibold tracking-[0.25em] uppercase'>Investasi Program</p>
+            <div className='mt-2 flex flex-wrap items-end gap-2'>
+              <span className='text-foreground text-3xl leading-none font-bold'>Rp 169.000</span>
+              <span className='text-muted-foreground text-sm'>per peserta</span>
+            </div>
+            <p className='text-foreground mt-3 text-sm'>
+              Satu kali pembayaran untuk seluruh rangkaian kelas dan konsultasi premium Sekolah Menyusui.
+            </p>
+          </div>
+        </div>
+      ),
     },
   ];
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className='p-5 md:p-8'>
+    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 p-5 md:p-8'>
+      <div className='relative h-32 w-full overflow-visible md:h-46'>
+        <Image
+          src='/banner.png'
+          alt='Sekolah Menyusui banner'
+          fill
+          className='absolute object-cover'
+          unoptimized={true}
+        />
+      </div>
       <MultiStepFormProvider
         stepsFields={steps}
         onStepValidation={async (step) => {
@@ -338,7 +372,7 @@ export function RegistrationForm() {
               Lanjut <ChevronRight />
             </NextButton>
             <SubmitButton className='flex-1' type='submit'>
-              Submit
+              Proses Pembayaran
             </SubmitButton>
           </div>
         </MultiStepFormContent>
