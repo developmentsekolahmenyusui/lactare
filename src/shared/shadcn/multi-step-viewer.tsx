@@ -102,7 +102,7 @@ const StepFields = (props: React.ComponentProps<'div'> & MotionProps) => {
 };
 
 function MultiStepFormContent(props: React.ComponentProps<'div'>) {
-  return <div className='flex flex-col gap-8 pt-3' {...props} />;
+  return <div className='flex flex-col gap-5 pt-3' {...props} />;
 }
 
 export {
