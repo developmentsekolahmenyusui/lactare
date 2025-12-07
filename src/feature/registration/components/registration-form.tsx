@@ -34,6 +34,59 @@ export function RegistrationForm() {
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
+  const formValues = form.watch();
+
+  const getDisplayValue = (value?: string | number | null, suffix?: string) => {
+    const isEmptyValue =
+      value === undefined || value === null || value === '' || (typeof value === 'number' && Number.isNaN(value));
+
+    if (isEmptyValue) {
+      return '-';
+    }
+
+    const formattedValue = typeof value === 'number' ? value.toString() : value;
+
+    return suffix ? `${formattedValue} ${suffix}` : formattedValue;
+  };
+
+  const confirmationSummary = [
+    {
+      label: 'Nama Lengkap',
+      value: getDisplayValue(formValues.fullName),
+    },
+    {
+      label: 'Nama Sertifikat',
+      value: getDisplayValue(formValues.certificateName),
+    },
+    {
+      label: 'Email',
+      value: getDisplayValue(formValues.email),
+    },
+    {
+      label: 'Nomor Telepon',
+      value: `+62 ${formValues.phoneNumber}`,
+    },
+    {
+      label: 'Pendidikan Terakhir',
+      value: getDisplayValue(formValues.lastEducation),
+    },
+    {
+      label: 'Usia Ibu',
+      value: getDisplayValue(formValues.motherAge, 'tahun'),
+    },
+    {
+      label: 'Usia Kandungan',
+      value: getDisplayValue(formValues.pregnancyAge, 'minggu'),
+    },
+    {
+      label: 'Usia Anak',
+      value: getDisplayValue(formValues.childAge, 'bulan'),
+    },
+    {
+      label: 'Domisili',
+      value: getDisplayValue(formValues.address),
+    },
+  ];
 
   const onSubmit = (data: RegistrationSchemaType) => {
     console.table(data);
@@ -326,7 +379,23 @@ export function RegistrationForm() {
       title: 'Konfirmasi',
       fields: [],
       component: (
-        <div className='w-full space-y-4'>
+        <div className='w-full space-y-8 pb-6'>
+          <div className='w-full rounded-xl'>
+            <p className='text-foreground text-sm font-semibold'>Ringkasan Data Peserta</p>
+            <p className='text-muted-foreground mt-1 text-xs'>
+              Mohon pastikan seluruh data sudah benar sebelum melanjutkan pembayaran.
+            </p>
+            <dl className='text-foreground mt-4 grid gap-3 md:grid-cols-2'>
+              {confirmationSummary.map((item) => (
+                <div key={item.label} className='bg-muted/40 rounded-lg border p-3'>
+                  <dt className='text-muted-foreground text-[0.65rem] font-semibold tracking-[0.2em] uppercase'>
+                    {item.label}
+                  </dt>
+                  <dd className='text-foreground mt-1 text-sm font-medium'>{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
           <div className='border-primary/60 bg-primary/5 w-full rounded-xl border p-5 shadow-sm'>
             <p className='text-primary text-xs font-semibold tracking-[0.25em] uppercase'>Investasi Program</p>
             <div className='mt-2 flex flex-wrap items-end gap-2'>
@@ -344,7 +413,7 @@ export function RegistrationForm() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 p-5 md:p-8'>
-      <div className='relative h-32 w-full overflow-visible md:h-46'>
+      <div className='relative h-26 w-full overflow-visible md:h-46'>
         <Image
           src='/banner.png'
           alt='Sekolah Menyusui banner'

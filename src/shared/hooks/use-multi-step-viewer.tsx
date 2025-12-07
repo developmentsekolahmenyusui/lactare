@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { JSX } from 'react';
 
 export interface Stepfields {
@@ -40,6 +40,16 @@ export function MultiStepFormProvider({ children, stepsFields, onStepValidation 
   const [steps, setStepsState] = useState<Stepfields[]>(stepsFields);
   const [currentStepIndex, setCurrentStepIndex] = useState(1);
 
+  useEffect(() => {
+    setStepsState(stepsFields);
+    setCurrentStepIndex((prev) => {
+      if (stepsFields.length === 0) return 1;
+      if (prev > stepsFields.length) return stepsFields.length;
+      if (prev < 1) return 1;
+      return prev;
+    });
+  }, [stepsFields]);
+
   const goToNext = async () => {
     const currentStepData = steps[currentStepIndex - 1];
 
@@ -73,10 +83,12 @@ export function MultiStepFormProvider({ children, stepsFields, onStepValidation 
 
   const setSteps = (newSteps: Stepfields[]) => {
     setStepsState(newSteps);
-    // Reset to first step if current step is out of bounds
-    if (currentStepIndex > newSteps.length) {
-      setCurrentStepIndex(1);
-    }
+    setCurrentStepIndex((prev) => {
+      if (newSteps.length === 0) return 1;
+      if (prev > newSteps.length) return newSteps.length;
+      if (prev < 1) return 1;
+      return prev;
+    });
   };
 
   const value: MultiStepFormContextType = {
