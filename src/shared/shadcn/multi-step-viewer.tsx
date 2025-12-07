@@ -65,7 +65,7 @@ const FormHeader = (props: React.ComponentProps<'div'>) => {
                 </StepperTitle>
               </div>
               <StepperTrigger />
-              {!isLast && <StepperSeparator className='-mx-10 mt-3' />}
+              {!isLast && <StepperSeparator className='-mx-8 mt-3' />}
             </StepperItem>
           );
         })}
