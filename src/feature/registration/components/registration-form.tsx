@@ -94,7 +94,7 @@ export function RegistrationForm() {
 
   const steps: Stepfields[] = [
     {
-      title: 'Pembukaan',
+      title: 'Informasi',
       fields: [],
       component: (
         <div className='w-full space-y-4 pb-4'>
