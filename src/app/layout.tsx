@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Alan_Sans } from 'next/font/google';
 import '~/shared/css/globals.css';
+import { Provider } from '~/shared/provider';
 
 const geistSans = Alan_Sans({
   variable: '--font-sans',
@@ -18,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} antialiased`}>
+        <Provider>
+          {children}
+        </Provider>
+      </body>
     </html>
   );
 }
