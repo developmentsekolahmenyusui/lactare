@@ -1,6 +1,5 @@
 'use client';
 
-import { RegistrationSchema, RegistrationSchemaType } from '../schema';
 import Image from 'next/image';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,6 +18,9 @@ import {
   SubmitButton,
 } from '~/shared/shadcn/multi-step-viewer';
 import { BadgeCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { createTransactionAction } from '../action';
+import { RegistrationSchema, RegistrationSchemaType } from '../schema';
 
 const OPENING_BENEFITS = [
   '5 kali kelas, dengan 30 sub-bab pengajaran.',
@@ -35,6 +37,15 @@ export function RegistrationForm() {
     reValidateMode: 'onChange',
   });
   const formValues = form.watch();
+  
+  const createTransactionMutation = useMutation({
+    mutationFn: async (values: RegistrationSchemaType) => {
+      return await createTransactionAction(values);
+    },
+    onSuccess: () => {
+      form.reset();
+    },
+  });
 
   const getDisplayValue = (value?: string | number | null, suffix?: string) => {
     const isEmptyValue =
@@ -88,8 +99,12 @@ export function RegistrationForm() {
     },
   ];
 
-  const onSubmit = (data: RegistrationSchemaType) => {
-    console.table(data);
+  const onSubmit = async (data: RegistrationSchemaType) => {
+    try {
+      await createTransactionMutation.mutateAsync(data);
+    } catch (error) {
+      console.error('Failed to submit registration', error);
+    }
   };
 
   const steps: Stepfields[] = [
@@ -440,8 +455,8 @@ export function RegistrationForm() {
             <NextButton className='flex-1'>
               Lanjut <ChevronRight />
             </NextButton>
-            <SubmitButton className='flex-1' type='submit'>
-              Proses Pembayaran
+            <SubmitButton className='flex-1' type='submit' disabled={createTransactionMutation.isPending}>
+              {createTransactionMutation.isPending ? 'Memproses...' : 'Proses Pembayaran'}
             </SubmitButton>
           </div>
         </MultiStepFormContent>
