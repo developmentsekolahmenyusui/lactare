@@ -3,6 +3,7 @@ export const Env = {
   SESSION_SECRET: 'SESSION_SECRET',
   ADMIN_USERNAME: 'ADMIN_USERNAME',
   ADMIN_PASSWORD: 'ADMIN_PASSWORD',
+  DATABASE_URL: 'DATABASE_URL',
 } as const;
 
 type EnvKey = (typeof Env)[keyof typeof Env];
