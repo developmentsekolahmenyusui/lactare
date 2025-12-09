@@ -26,7 +26,7 @@ export function RegistrationForm() {
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
-  
+
   const formValues = form.watch();
 
   const createTransactionMutation = useMutation({

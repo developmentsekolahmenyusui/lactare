@@ -6,6 +6,6 @@ const pool = new Pool({
   connectionString: getEnv(Env.DATABASE_URL),
 });
 
-export const db = drizzle({ client: pool });
+export const db = drizzle({ client: pool, logger: true });
 
 export type DB = typeof db;
