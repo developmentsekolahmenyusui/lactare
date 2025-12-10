@@ -78,10 +78,10 @@ const columns: ColumnDef<TransactionRow>[] = [
     },
   },
   {
-    accessorKey: 'actions',
-    header: 'Action',
+    accessorKey: 'detail',
+    header: 'Detail',
     cell: () => {
-      return <ExternalLinkIcon className='text-neutral-600' />;
+      return <ExternalLinkIcon className='text-neutral-600 size-4' />;
     },
   },
 ];
