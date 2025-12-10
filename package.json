@@ -24,6 +24,7 @@
     "drizzle-orm": "^0.45.0",
     "iron-session": "^8.0.4",
     "lucide-react": "^0.555.0",
+    "moment-timezone": "^0.6.0",
     "motion": "^12.23.25",
     "next": "16.0.7",
     "nuqs": "^2.8.3",

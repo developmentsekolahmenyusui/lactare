@@ -1,12 +1,15 @@
 'use server';
 
-import { and, count, desc, eq, ilike, or, SQL, sql } from 'drizzle-orm';
+import { and, between, count, desc, eq, ilike, or, SQL, sql } from 'drizzle-orm';
 import { db } from '~/shared/db';
 import { transactionLogs, transactions } from '~/shared/db/schema';
+import moment from 'moment-timezone';
 
 interface Params {
   page: number;
   size: number;
+  to?: string;
+  from?: string;
   query?: string;
   status?: string;
 }
@@ -20,6 +23,22 @@ function getConditions(params: Params) {
         ilike(transactions.email, `${params.query}%`),
         ilike(transactions.phoneNumber, `${params.query}%`),
       ),
+    );
+  }
+  if (params.from && params.to) {
+    const tzFrom = moment.tz(params.from, 'Asia/Jakarta');
+    const tzTo = moment.tz(params.to, 'Asia/Jakarta');
+    const start = tzFrom.clone().startOf('day').utc();
+    const end = tzTo.clone().endOf('day').utc();
+    conditions.push(
+      between(transactions.createdAt, start.toDate(), end.toDate()),
+    );
+  } else if (params.from) {
+    const tzFrom = moment.tz(params.from, 'Asia/Jakarta');
+    const start = tzFrom.clone().startOf('day').utc();
+    const end = tzFrom.clone().endOf('day').utc();
+    conditions.push(
+      between(transactions.createdAt, start.toDate(), end.toDate()),
     );
   }
   if (params.status) {

@@ -20,6 +20,8 @@ export function TransactionListPage(props: Props) {
       getTransactions({
         page: props.page,
         size: props.size,
+        to: props.to || undefined,
+        from: props.from || undefined,
         query: props.q || undefined,
         status: props.status || undefined,
       }),
@@ -32,6 +34,8 @@ export function TransactionListPage(props: Props) {
       getTransactionCount({
         page: props.page,
         size: props.size,
+        to: props.to || undefined,
+        from: props.from || undefined,
         query: props.q || undefined,
         status: props.status || undefined,
       }),
