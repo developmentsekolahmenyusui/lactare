@@ -95,11 +95,11 @@ export function RegistrationForm() {
           <FormHeader />
           <StepFields />
           <div className='flex flex-row items-center justify-center gap-x-3'>
-            <PreviousButton className='flex-1'>
+            <PreviousButton className='flex-1' disabled={createTransactionMutation.isPending}>
               <ChevronLeft />
               Kembali
             </PreviousButton>
-            <NextButton className='flex-1'>
+            <NextButton className='flex-1' disabled={createTransactionMutation.isPending}>
               Lanjut <ChevronRight />
             </NextButton>
             <SubmitButton className='flex-1' type='submit' disabled={createTransactionMutation.isPending}>
