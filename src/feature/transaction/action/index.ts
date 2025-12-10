@@ -4,6 +4,7 @@ import { and, between, count, desc, eq, ilike, or, SQL, sql } from 'drizzle-orm'
 import { db } from '~/shared/db';
 import { transactionLogs, transactions } from '~/shared/db/schema';
 import moment from 'moment-timezone';
+import { desc as orderDesc } from 'drizzle-orm/sql';
 
 interface Params {
   page: number;
@@ -30,16 +31,12 @@ function getConditions(params: Params) {
     const tzTo = moment.tz(params.to, 'Asia/Jakarta');
     const start = tzFrom.clone().startOf('day').utc();
     const end = tzTo.clone().endOf('day').utc();
-    conditions.push(
-      between(transactions.createdAt, start.toDate(), end.toDate()),
-    );
+    conditions.push(between(transactions.createdAt, start.toDate(), end.toDate()));
   } else if (params.from) {
     const tzFrom = moment.tz(params.from, 'Asia/Jakarta');
     const start = tzFrom.clone().startOf('day').utc();
     const end = tzFrom.clone().endOf('day').utc();
-    conditions.push(
-      between(transactions.createdAt, start.toDate(), end.toDate()),
-    );
+    conditions.push(between(transactions.createdAt, start.toDate(), end.toDate()));
   }
   if (params.status) {
     conditions.push(eq(transactions.paymentStatus, params.status));
@@ -88,4 +85,17 @@ export async function createTransactionLog({ transactionId, type, payload }: Cre
     type,
     payload,
   });
+}
+
+export async function getTransactionById(id: string) {
+  const [transaction] = await db.select().from(transactions).where(eq(transactions.id, id)).limit(1);
+  return transaction ?? null;
+}
+
+export async function getLogsByTransactionId(transactionId: string) {
+  return await db
+    .select()
+    .from(transactionLogs)
+    .where(eq(transactionLogs.transactionId, transactionId))
+    .orderBy(desc(transactionLogs.createdAt));
 }

@@ -6,6 +6,7 @@ import { currencyFmt, dateFmt } from '~/shared/lib/format';
 import { DataTable } from '~/shared/shadcn/data-table';
 import { TransactionStatusBadge } from './transaction-status-badge';
 import { ExternalLinkIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
   page: number;
@@ -80,8 +81,13 @@ const columns: ColumnDef<TransactionRow>[] = [
   {
     accessorKey: 'detail',
     header: 'Detail',
-    cell: () => {
-      return <ExternalLinkIcon className='text-neutral-600 size-4' />;
+    cell: ({ row }) => {
+      const { id } = row.original;
+      return (
+        <Link href={`/transaction/${id}`}>
+          <ExternalLinkIcon className='size-4 text-neutral-600' />
+        </Link>
+      );
     },
   },
 ];
