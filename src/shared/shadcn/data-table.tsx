@@ -1,22 +1,9 @@
 'use client';
 
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  PaginationState,
-  useReactTable,
-} from '@tanstack/react-table';
+import { ColumnDef, flexRender, getCoreRowModel, PaginationState, useReactTable } from '@tanstack/react-table';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from './table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
 import DataTablePagination from './data-table-pagination';
 
 interface DataTableProps<TData, TValue> {
@@ -75,12 +62,7 @@ export function DataTable<TData, TValue>({
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                       </TableHead>
                     );
                   })}
@@ -91,16 +73,10 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length
               ? table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
+                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className='py-2.5'>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -108,7 +84,7 @@ export function DataTable<TData, TValue>({
               : Array.from({ length: 20 }).map((_, i) => (
                   <TableRow key={i} className=''>
                     <TableCell colSpan={columns.length} className='h-10 py-2.5'>
-                      <div className='animate-pulse bg-neutral-500/10 h-full rounded-md' />
+                      <div className='h-full animate-pulse rounded-md bg-neutral-500/10' />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -116,7 +92,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='flex-1 text-sm text-muted-foreground'>
+        <div className='text-muted-foreground flex-1 text-sm'>
           {table.getFilteredRowModel().rows.length}
           {totalItems ? ` of ${totalItems} ` : null}
           row(s)

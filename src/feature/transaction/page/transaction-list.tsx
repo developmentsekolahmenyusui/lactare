@@ -14,33 +14,30 @@ interface Props {
   to: string | null;
 }
 
-
 export function TransactionListPage(props: Props) {
-  const {
-    data: entries = [],
-  } = useQuery({
+  const { data: entries = [] } = useQuery({
     queryKey: ['transactions', props],
-    queryFn: () => getTransactions({
-      page: props.page,
-      size: props.size,
-      query: props.q || undefined,
-    }),
+    queryFn: () =>
+      getTransactions({
+        page: props.page,
+        size: props.size,
+        query: props.q || undefined,
+      }),
     placeholderData: (previousData) => previousData,
   });
 
-  const {
-    data: count = 0,
-  } = useQuery({
+  const { data: count = 0 } = useQuery({
     queryKey: ['transactions', 'pagination', props],
-    queryFn: () => getTransactionCount({
-      page: props.page,
-      size: props.size,
-    }),
+    queryFn: () =>
+      getTransactionCount({
+        page: props.page,
+        size: props.size,
+      }),
     placeholderData: (previousData) => previousData,
   });
 
   return (
-    <div className='space-y-4 max-w-7xl mx-auto bg-white p-6 rounded-lg border'>
+    <div className='mx-auto max-w-7xl space-y-4 rounded-lg border bg-white p-6'>
       <TransactionDataTableFilter />
       <TransactionDataTable page={props.page} size={props.size} entries={entries} count={count} />
     </div>

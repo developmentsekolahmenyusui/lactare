@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React from "react";
-import { useDebounce } from "~/shared/hooks/use-debounce";
-import { dateFmt } from "~/shared/lib/format";
-import { Button } from "~/shared/shadcn/button";
-import { Popover, PopoverContent, PopoverTrigger } from "~/shared/shadcn/popover";
-import { Input } from "~/shared/shadcn/input";
-import { Calendar } from "~/shared/shadcn/calendar";
-import { DateRange } from "react-day-picker";
-import { CalendarIcon } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
+import { useDebounce } from '~/shared/hooks/use-debounce';
+import { dateFmt } from '~/shared/lib/format';
+import { Button } from '~/shared/shadcn/button';
+import { Popover, PopoverContent, PopoverTrigger } from '~/shared/shadcn/popover';
+import { Input } from '~/shared/shadcn/input';
+import { Calendar } from '~/shared/shadcn/calendar';
+import { DateRange } from 'react-day-picker';
+import { CalendarIcon } from 'lucide-react';
 
 const TransactionDataTableFilter = () => {
   const router = useRouter();
@@ -29,7 +29,6 @@ const TransactionDataTableFilter = () => {
     const currentQuery = searchParams.get('q') ?? '';
     setQuery((prev) => (prev === currentQuery ? prev : currentQuery));
   }, [searchParams]);
-
 
   React.useEffect(() => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -77,7 +76,7 @@ const TransactionDataTableFilter = () => {
   }, [filtered, debouncedQuery]);
 
   return (
-    <div className='w-full flex items-center gap-x-3'>
+    <div className='flex w-full items-center gap-x-3'>
       <Input
         placeholder='Search transactions'
         value={query}
@@ -86,16 +85,12 @@ const TransactionDataTableFilter = () => {
       />
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            id='date'
-            variant={'outline'}
-          >
+          <Button id='date' variant={'outline'}>
             <CalendarIcon />
             {date?.from ? (
               date.to ? (
                 <>
-                  {dateFmt.format(date.from)} -{' '}
-                  {dateFmt.format(date.to)}
+                  {dateFmt.format(date.from)} - {dateFmt.format(date.to)}
                 </>
               ) : (
                 dateFmt.format(date.from)
@@ -118,6 +113,6 @@ const TransactionDataTableFilter = () => {
       </Popover>
     </div>
   );
-}
+};
 
 export default TransactionDataTableFilter;
