@@ -5,6 +5,7 @@ import { Transaction } from '~/shared/db/schema';
 import { currencyFmt, dateFmt } from '~/shared/lib/format';
 import { DataTable } from '~/shared/shadcn/data-table';
 import { TransactionStatusBadge } from './transaction-status-badge';
+import { ExternalLinkIcon } from 'lucide-react';
 
 interface Props {
   page: number;
@@ -74,6 +75,13 @@ const columns: ColumnDef<TransactionRow>[] = [
       const value = cell.getValue<Date | string>();
       const dateValue = value instanceof Date ? value : new Date(value);
       return <span>{dateFmt.format(dateValue)}</span>;
+    },
+  },
+  {
+    accessorKey: 'actions',
+    header: 'Action',
+    cell: () => {
+      return <ExternalLinkIcon className='text-neutral-600' />;
     },
   },
 ];

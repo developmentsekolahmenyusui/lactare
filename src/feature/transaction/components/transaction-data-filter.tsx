@@ -9,7 +9,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/shared/shadcn/popover
 import { Input } from '~/shared/shadcn/input';
 import { Calendar } from '~/shared/shadcn/calendar';
 import { DateRange } from 'react-day-picker';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, XIcon } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/shadcn/select';
+import { statusConfig } from '../constant';
 
 const TransactionDataTableFilter = () => {
   const router = useRouter();
@@ -24,10 +26,16 @@ const TransactionDataTableFilter = () => {
   const filtered = useDebounce(`${date?.from}-${date?.to}`, 1000);
   const [query, setQuery] = React.useState(() => searchParams.get('q') ?? '');
   const debouncedQuery = useDebounce(query, 500);
+  const [status, setStatus] = React.useState(() => searchParams.get('status') ?? '');
 
   React.useEffect(() => {
     const currentQuery = searchParams.get('q') ?? '';
     setQuery((prev) => (prev === currentQuery ? prev : currentQuery));
+  }, [searchParams]);
+
+  React.useEffect(() => {
+    const currentStatus = searchParams.get('status') ?? '';
+    setStatus((prev) => (prev === currentStatus ? prev : currentStatus));
   }, [searchParams]);
 
   React.useEffect(() => {
@@ -65,6 +73,12 @@ const TransactionDataTableFilter = () => {
       newSearchParams.delete('q');
     }
 
+    if (status) {
+      newSearchParams.set('status', status);
+    } else {
+      newSearchParams.delete('status');
+    }
+
     if (newSearchParams.has('page')) {
       newSearchParams.set('page', '1');
     }
@@ -73,7 +87,7 @@ const TransactionDataTableFilter = () => {
     router.push(search ? `${pathname}?${search}` : pathname);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtered, debouncedQuery]);
+  }, [filtered, debouncedQuery, status]);
 
   return (
     <div className='flex w-full items-center gap-x-3'>
@@ -83,9 +97,39 @@ const TransactionDataTableFilter = () => {
         onChange={(event) => setQuery(event.target.value)}
         className='max-w-sm'
       />
+      <div className='relative w-[180px]'>
+        <Select
+          value={status}
+          onValueChange={(value) => {
+            console.log(status === value);
+            setStatus((prev) => (prev === value ? '' : value));
+          }}
+        >
+          <SelectTrigger className='w-full'>
+            <SelectValue placeholder='Status' />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.entries(statusConfig).map(([value, config]) => (
+              <SelectItem key={value} value={value}>
+                {config.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {status && (
+          <button
+            onClick={() => {
+              setStatus('');
+            }}
+            className='text-muted-foreground bg-accent hover:text-accent-foreground absolute top-1/2 right-2.5 -translate-y-1/2 rounded-sm p-1'
+          >
+            <XIcon className='h-4 w-4' />
+          </button>
+        )}
+      </div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button id='date' variant={'outline'}>
+          <Button id='date' variant='outline' className='bg-white'>
             <CalendarIcon />
             {date?.from ? (
               date.to ? (

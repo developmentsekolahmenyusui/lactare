@@ -1,6 +1,4 @@
 'use client';
-
-import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getTransactionCount, getTransactions } from '~/feature/transaction/action';
 import { TransactionDataTable } from '../components/transaction-data-table';
@@ -12,6 +10,7 @@ interface Props {
   q: string | null;
   from: string | null;
   to: string | null;
+  status: string | null;
 }
 
 export function TransactionListPage(props: Props) {
@@ -22,6 +21,7 @@ export function TransactionListPage(props: Props) {
         page: props.page,
         size: props.size,
         query: props.q || undefined,
+        status: props.status || undefined,
       }),
     placeholderData: (previousData) => previousData,
   });
@@ -32,6 +32,8 @@ export function TransactionListPage(props: Props) {
       getTransactionCount({
         page: props.page,
         size: props.size,
+        query: props.q || undefined,
+        status: props.status || undefined,
       }),
     placeholderData: (previousData) => previousData,
   });

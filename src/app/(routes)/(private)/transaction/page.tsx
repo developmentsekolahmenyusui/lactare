@@ -6,6 +6,7 @@ export default async function Page(props: {
     q?: string;
     from?: string;
     to?: string;
+    status?: string;
   }>;
 }) {
   const searchParams = await props.searchParams;
@@ -17,6 +18,7 @@ export default async function Page(props: {
         q={searchParams?.q || null}
         from={searchParams?.from ?? null}
         to={searchParams?.to ?? null}
+        status={searchParams?.status ?? null}
       />
     </div>
   );

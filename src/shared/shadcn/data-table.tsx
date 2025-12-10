@@ -53,13 +53,13 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className='w-full'>
-      <div className='rounded-md border'>
+      <div className='overflow-clip rounded-md border'>
         <Table>
-          <TableHeader>
+          <TableHeader className='bg-primary'>
             {table.getHeaderGroups().map((headerGroup) => {
               return (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
+                  {headerGroup.headers.map((header, index) => {
                     return (
                       <TableHead key={header.id}>
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
