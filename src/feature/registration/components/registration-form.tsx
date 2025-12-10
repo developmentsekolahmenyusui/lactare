@@ -25,6 +25,15 @@ export function RegistrationForm() {
     resolver: zodResolver(RegistrationSchema as any),
     mode: 'onChange',
     reValidateMode: 'onChange',
+    defaultValues: {
+      fullName: 'dien',
+      email: 'dien@gmail.com',
+      phoneNumber: 81915614444,
+      certificateName: 'dien',
+      lastEducation: 'S1',
+      motherAge: 25,
+      address: 'Depok',
+    },
   });
 
   const formValues = form.watch();

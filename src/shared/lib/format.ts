@@ -8,7 +8,10 @@ export const currencyFmt = Intl.NumberFormat('id-ID', {
 });
 
 export const dateFmt = new Intl.DateTimeFormat('en-EN', {
-  month: 'long',
-  day: 'numeric',
   year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
 });

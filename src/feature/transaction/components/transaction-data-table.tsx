@@ -4,6 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Transaction } from '~/shared/db/schema';
 import { currencyFmt, dateFmt } from '~/shared/lib/format';
 import { DataTable } from '~/shared/shadcn/data-table';
+import { TransactionStatusBadge } from './transaction-status-badge';
 
 interface Props {
   page: number;
@@ -12,16 +13,12 @@ interface Props {
   entries: Transaction[];
 }
 
-type TransactionRow = Omit<Transaction, 'searchVector'>;
+type TransactionRow = Transaction;
 
 const columns: ColumnDef<TransactionRow>[] = [
   {
     accessorKey: 'fullName',
     header: 'Full Name',
-  },
-  {
-    accessorKey: 'certificateName',
-    header: 'Certificate Name',
   },
   {
     accessorKey: 'email',
@@ -30,34 +27,18 @@ const columns: ColumnDef<TransactionRow>[] = [
   {
     accessorKey: 'phoneNumber',
     header: 'Phone Number',
-  },
-  {
-    accessorKey: 'lastEducation',
-    header: 'Last Education',
-  },
-  {
-    accessorKey: 'motherAge',
-    header: 'Mother Age',
-  },
-  {
-    accessorKey: 'pregnancyAge',
-    header: 'Pregnancy Age',
     cell: ({ cell }) => {
-      const value = cell.getValue<number | null>();
-      return <span>{value ?? '-'}</span>;
+      const phoneNumber = cell.getValue<number>();
+      return <span>{phoneNumber}</span>;
     },
   },
   {
-    accessorKey: 'childAge',
-    header: 'Child Age',
+    accessorKey: 'paymentStatus',
+    header: 'Payment Status',
     cell: ({ cell }) => {
-      const value = cell.getValue<number | null>();
-      return <span>{value ?? '-'}</span>;
+      const status = cell.getValue<string>();
+      return <TransactionStatusBadge status={status} />;
     },
-  },
-  {
-    accessorKey: 'address',
-    header: 'Address',
   },
   {
     accessorKey: 'amount',
@@ -66,10 +47,6 @@ const columns: ColumnDef<TransactionRow>[] = [
       const amount = cell.getValue<number>();
       return <span>{currencyFmt.format(amount)}</span>;
     },
-  },
-  {
-    accessorKey: 'paymentStatus',
-    header: 'Payment Status',
   },
   {
     accessorKey: 'paymentAt',
@@ -83,7 +60,7 @@ const columns: ColumnDef<TransactionRow>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created',
+    header: 'Created Date',
     cell: ({ cell }) => {
       const value = cell.getValue<Date | string>();
       const dateValue = value instanceof Date ? value : new Date(value);
@@ -92,7 +69,7 @@ const columns: ColumnDef<TransactionRow>[] = [
   },
   {
     accessorKey: 'updatedAt',
-    header: 'Updated',
+    header: 'Updated Date',
     cell: ({ cell }) => {
       const value = cell.getValue<Date | string>();
       const dateValue = value instanceof Date ? value : new Date(value);

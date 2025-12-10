@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { ulid } from 'ulid';
 
-import { customType, index, integer, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { customType, index, integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 const tsvector = customType<{ data: string; driverData: string }>({
   dataType: () => 'tsvector',
@@ -24,24 +24,33 @@ export const transactions = pgTable(
     address: text('address').notNull(),
     amount: integer('amount').notNull(),
     paymentStatus: varchar('payment_status', { length: 32 }).notNull().default('pending'),
+    paymentLink: text('payment_link'),
     paymentAt: timestamp('payment_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
-    searchVector: tsvector('search_vector')
-      .generatedAlwaysAs(
-        sql`setweight(to_tsvector('english', coalesce(full_name, '')), 'A') || setweight(to_tsvector('english', coalesce(email, '')), 'B') || setweight(to_tsvector('english', coalesce(phone_number, '')), 'C')`,
-      )
-      .notNull(),
   },
   (t) => [
     index('transactions_full_name_idx').on(t.fullName),
     index('transactions_email_idx').on(t.email),
     index('transactions_phone_number_idx').on(t.phoneNumber),
-    index('transactions_search_vector_idx').using('gin', t.searchVector),
+    index('transactions_payment_status_idx').on(t.paymentStatus),
+    index('transactions_created_at_idx').on(t.createdAt),
     index('transactions_updated_at_idx').on(t.updatedAt),
   ],
 );
-
 export type Transaction = typeof transactions.$inferSelect;
 
-export type InsertTransaction = typeof transactions.$inferInsert;
+export const transactionLogs = pgTable(
+  'transaction_logs',
+  {
+    id: varchar('id', { length: 26 })
+      .$defaultFn(() => ulid())
+      .primaryKey(),
+    transactionId: varchar('transaction_id', { length: 26 }).notNull(),
+    type: varchar('type', { length: 32 }).notNull(),
+    payload: jsonb('payload').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index('transaction_logs_created_at_idx').on(t.createdAt)],
+);
+export type TransactionLog = typeof transactionLogs.$inferSelect;

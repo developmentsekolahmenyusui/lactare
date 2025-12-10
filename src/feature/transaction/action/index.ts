@@ -1,8 +1,8 @@
 'use server';
 
-import { and, count, eq, SQL, sql } from 'drizzle-orm';
+import { and, count, desc, eq, ilike, or, SQL, sql } from 'drizzle-orm';
 import { db } from '~/shared/db';
-import { transactions } from '~/shared/db/schema';
+import { transactionLogs, transactions } from '~/shared/db/schema';
 
 interface Params {
   page: number;
@@ -12,9 +12,15 @@ interface Params {
 }
 
 function getConditions(params: Params) {
-  const conditions: SQL[] = [];
+  const conditions: (SQL<unknown> | undefined)[] = [];
   if (params.query) {
-    conditions.push(sql`search_vector @@ plainto_tsquery('english', ${params.query})`);
+    conditions.push(
+      or(
+        ilike(transactions.fullName, `${params.query}%`),
+        ilike(transactions.email, `${params.query}%`),
+        ilike(transactions.phoneNumber, `${params.query}%`),
+      ),
+    );
   }
   if (params.status) {
     conditions.push(eq(transactions.paymentStatus, params.status));
@@ -29,6 +35,7 @@ export async function getTransactions(params: Params) {
     .select()
     .from(transactions)
     .where(and(...conditions))
+    .orderBy(desc(transactions.createdAt))
     .limit(params.size)
     .offset((params.page - 1) * params.size);
 }
@@ -40,4 +47,26 @@ export async function getTransactionCount(params: Params) {
     .from(transactions)
     .where(and(...conditions));
   return result[0]?.count ?? 0;
+}
+
+type LogType =
+  | 'payment_request'
+  | 'payment_response'
+  | 'payment_response_error'
+  | 'callback_request'
+  | 'callback_response'
+  | (string & {});
+
+interface CreateTransactionLogParams {
+  transactionId: string;
+  type: LogType;
+  payload: unknown;
+}
+
+export async function createTransactionLog({ transactionId, type, payload }: CreateTransactionLogParams) {
+  await db.insert(transactionLogs).values({
+    transactionId,
+    type,
+    payload,
+  });
 }

@@ -4,6 +4,7 @@ import { transactions } from '~/shared/db/schema';
 import crypto from 'crypto';
 import { eq } from 'drizzle-orm';
 import { getEnv } from '~/shared/lib/env';
+import { createTransactionLog } from '~/feature/transaction/action';
 
 export async function POST(req: NextRequest) {
   const secretKey = getEnv('DOKU_SECRET_KEY');
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
   const signatureValid = signature === expectedSignature;
 
   if (!signatureValid) {
-    console.error('❌ Invalid DOKU signature');
+    console.error('Invalid DOKU signature');
     return NextResponse.json({ message: 'invalid signature' }, { status: 401 });
   }
 
@@ -42,16 +43,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'invalid json' }, { status: 400 });
   }
 
-  console.log(body);
-
   const invoiceNumber: string = body?.order?.invoice_number;
   const status: string = body?.transaction?.status;
 
   if (!invoiceNumber || !status) {
     return NextResponse.json({ message: 'missing fields' }, { status: 400 });
   }
-
   const id = invoiceNumber.replace('INV-', '');
+
+  await createTransactionLog({
+    transactionId: id,
+    type: 'callback_request',
+    payload: {
+      headers: {
+        clientId,
+        requestId,
+        timestamp,
+      },
+      body,
+    },
+  });
 
   let paymentStatus: 'paid' | 'failed' | 'expired' = 'failed';
 
@@ -67,7 +78,13 @@ export async function POST(req: NextRequest) {
     })
     .where(eq(transactions.id, id));
 
-  console.log('✅ DOKU callback processed:', invoiceNumber, status);
+  const responsePayload = { message: 'ok' };
 
-  return NextResponse.json({ message: 'ok' }, { status: 200 });
+  await createTransactionLog({
+    transactionId: id,
+    type: 'callback_response',
+    payload: responsePayload,
+  });
+
+  return NextResponse.json(responsePayload, { status: 200 });
 }

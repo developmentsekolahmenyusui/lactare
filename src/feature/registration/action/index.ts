@@ -4,9 +4,11 @@ import { ulid } from 'ulid';
 import { RegistrationSchema, RegistrationSchemaType } from '../schema';
 import { db } from '~/shared/db';
 import { transactions } from '~/shared/db/schema';
+import { createTransactionLog } from '~/feature/transaction/action';
 import { generateSignature } from '~/shared/lib/doku';
 import { getEnv } from '~/shared/lib/env';
 import { redirect } from 'next/navigation';
+import { eq } from 'drizzle-orm';
 
 const REGISTRATION_FEE = 169_000;
 
@@ -31,21 +33,36 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
 
   const invoiceNumber = `INV-${transaction.id}`;
 
-  const body = JSON.stringify({
+  const dokuPayload = {
     order: {
       amount: REGISTRATION_FEE,
       currency: 'IDR',
       invoice_number: invoiceNumber,
     },
     payment: {
-      payment_due_date: 10,
+      payment_due_date: 60,
+      payment_method_types: [
+        'VIRTUAL_ACCOUNT_BANK_MANDIRI',
+        'VIRTUAL_ACCOUNT_BANK_SYARIAH_MANDIRI',
+        'VIRTUAL_ACCOUNT_BRI',
+        'VIRTUAL_ACCOUNT_BNI',
+        'VIRTUAL_ACCOUNT_DOKU',
+        'VIRTUAL_ACCOUNT_BANK_PERMATA',
+        'VIRTUAL_ACCOUNT_BANK_CIMB',
+        'VIRTUAL_ACCOUNT_BANK_DANAMON',
+        'VIRTUAL_ACCOUNT_BTN',
+        'VIRTUAL_ACCOUNT_BNC',
+        'QRIS',
+      ],
     },
     customer: {
       name: transaction.fullName,
       email: transaction.email,
       phone: transaction.phoneNumber,
     },
-  });
+  };
+
+  const body = JSON.stringify(dokuPayload);
 
   const requestId = ulid();
   const timestamp = new Date().toISOString().slice(0, 19) + 'Z';
@@ -56,6 +73,17 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
     requestId,
     timestamp,
     target,
+  });
+
+  await createTransactionLog({
+    transactionId: transaction.id,
+    type: 'payment_request',
+    payload: {
+      target,
+      requestId,
+      timestamp,
+      payload: dokuPayload,
+    },
   });
 
   const res = await fetch(`${getEnv('DOKU_BASE_URL')}${target}`, {
@@ -69,16 +97,39 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
     },
     body,
   });
+
+  const responseText = await res.text();
+  let responsePayload: unknown;
+  try {
+    responsePayload = JSON.parse(responseText);
+  } catch {
+    responsePayload = responseText;
+  }
+
+  await createTransactionLog({
+    transactionId: transaction.id,
+    type: res.ok ? 'payment_response' : 'payment_response_error',
+    payload: {
+      status: res.status,
+      payload: responsePayload,
+    },
+  });
+
   if (!res.ok) {
-    console.error('DOKU Error Response:', await res.text());
+    console.error('DOKU Error Response:', responseText);
     throw new Error('Failed to create DOKU payment');
   }
 
-  const parsed = await res.json();
-  const paymentUrl = parsed?.response?.payment?.url;
-  if (!paymentUrl) {
+  if (typeof responsePayload !== 'object' || responsePayload === null) {
+    throw new Error('Invalid DOKU response format');
+  }
+
+  const paymentLink = (responsePayload as any)?.response?.payment?.url;
+  if (!paymentLink) {
     throw new Error('DOKU response missing payment URL');
   }
 
-  redirect(paymentUrl);
+  await db.update(transactions).set({ paymentLink: paymentLink }).where(eq(transactions.id, transaction.id));
+
+  redirect(paymentLink);
 }
