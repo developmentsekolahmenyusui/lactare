@@ -26,6 +26,7 @@ export function TransactionListPage(props: Props) {
         status: props.status || undefined,
       }),
     placeholderData: (previousData) => previousData,
+    refetchOnWindowFocus: false,
   });
 
   const { data: count = 0 } = useQuery({
@@ -40,6 +41,7 @@ export function TransactionListPage(props: Props) {
         status: props.status || undefined,
       }),
     placeholderData: (previousData) => previousData,
+    refetchOnWindowFocus: false,
   });
 
   return (

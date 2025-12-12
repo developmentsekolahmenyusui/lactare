@@ -22,6 +22,7 @@ export function useTransactionDetail(
     enabled: Boolean(id) && (options?.enabled ?? true),
     initialData: options?.initialData,
     placeholderData: (previousData) => previousData,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -41,5 +42,6 @@ export function useTransactionLogs(
     },
     enabled: Boolean(id) && (options?.enabled ?? true),
     placeholderData: (previousData) => previousData,
+    refetchOnWindowFocus: false,
   });
 }

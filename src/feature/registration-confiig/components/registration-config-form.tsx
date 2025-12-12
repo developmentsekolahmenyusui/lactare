@@ -47,6 +47,7 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
     queryFn: () => getRegistrationConfig(),
     initialData: initialConfig,
     placeholderData: (previousData) => previousData ?? initialConfig,
+    refetchOnWindowFocus: false,
   });
 
   const latestConfig = config ?? initialConfig;
