@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { RegistrationConfig } from '~/shared/db/schema';
 import { RegistrationConfigFormSchema, RegistrationConfigFormValues } from '../schema';
-import { saveRegistrationConfig } from '../action';
+import { saveRegistrationConfig, getRegistrationConfig } from '../action';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/shared/shadcn/card';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '~/shared/shadcn/field';
 import { Input } from '~/shared/shadcn/input';
@@ -17,7 +17,6 @@ import { Button } from '~/shared/shadcn/button';
 import { Badge } from '~/shared/shadcn/badge';
 import { Alert, AlertDescription } from '~/shared/shadcn/alert';
 import { currencyFmt, dateFmt } from '~/shared/lib/format';
-import { getRegistrationConfig } from '~/feature/registration/action/registration-config';
 
 type FeedbackMessage = { type: 'success' | 'error'; message: string } | null;
 

@@ -9,7 +9,7 @@ import { generateSignature } from '~/shared/lib/doku';
 import { getEnv } from '~/shared/lib/env';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
-import { getRegistrationConfig } from './registration-config';
+import { getRegistrationConfig } from '~/feature/registration-confiig/action';
 
 export async function createTransactionAction(values: RegistrationSchemaType) {
   const payload = RegistrationSchema.parse(values);

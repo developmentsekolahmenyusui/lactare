@@ -1,5 +1,5 @@
 import { RegistrationConfigForm } from '../components/registration-config-form';
-import { getRegistrationConfig } from '~/feature/registration/action/registration-config';
+import { getRegistrationConfig } from '../action';
 
 export async function RegistrationConfigPage() {
   const config = await getRegistrationConfig();

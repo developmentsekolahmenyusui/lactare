@@ -12,7 +12,8 @@ import {
   StepFields,
   SubmitButton,
 } from '~/shared/shadcn/multi-step-viewer';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '~/shared/shadcn/button';
+import { CalendarX2, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { createTransactionAction } from '../action';
 import { RegistrationSchema, RegistrationSchemaType } from '../schema';
@@ -89,30 +90,61 @@ export function RegistrationForm({ config }: RegistrationFormProps) {
           unoptimized={true}
         />
       </div>
-      <MultiStepFormProvider
-        stepsFields={steps}
-        onStepValidation={async (step) => {
-          const isValid = await form.trigger(step.fields as any);
-          return isValid;
-        }}
-      >
-        <MultiStepFormContent>
-          <FormHeader />
-          <StepFields />
-          <div className='flex flex-row items-center justify-center gap-x-3'>
-            <PreviousButton className='flex-1' disabled={createTransactionMutation.isPending}>
-              <ChevronLeft />
-              Kembali
-            </PreviousButton>
-            <NextButton className='flex-1' disabled={createTransactionMutation.isPending}>
-              Lanjut <ChevronRight />
-            </NextButton>
-            <SubmitButton className='flex-1' type='submit' disabled={createTransactionMutation.isPending}>
-              {createTransactionMutation.isPending ? 'Memproses...' : 'Proses Pembayaran'}
-            </SubmitButton>
+      {config.isFormOpen ? (
+        <MultiStepFormProvider
+          stepsFields={steps}
+          onStepValidation={async (step) => {
+            const isValid = await form.trigger(step.fields as any);
+            return isValid;
+          }}
+        >
+          <MultiStepFormContent>
+            <div className='w-full flex flex-row justify-center items-center pb-2 md:pb-4'>
+              <h1 className='text-3xl text-center font-semibold'>{config.batchTitle}</h1>
+            </div>
+            <FormHeader />
+            <StepFields />
+            <div className='flex flex-row items-center justify-center gap-x-3'>
+              <PreviousButton className='flex-1' disabled={createTransactionMutation.isPending}>
+                <ChevronLeft />
+                Kembali
+              </PreviousButton>
+              <NextButton className='flex-1' disabled={createTransactionMutation.isPending}>
+                Lanjut <ChevronRight />
+              </NextButton>
+              <SubmitButton className='flex-1' type='submit' disabled={createTransactionMutation.isPending}>
+                {createTransactionMutation.isPending ? 'Memproses...' : 'Proses Pembayaran'}
+              </SubmitButton>
+            </div>
+          </MultiStepFormContent>
+        </MultiStepFormProvider>
+      ) : (
+        <div className='flex flex-col items-center gap-6 rounded-2xl border border-dashed border-muted bg-muted/30 p-6 text-center'>
+          <div className='flex size-20 items-center justify-center rounded-full bg-primary/10 text-primary'>
+            <CalendarX2 className='size-10' />
           </div>
-        </MultiStepFormContent>
-      </MultiStepFormProvider>
+          <div className='space-y-3'>
+            <p className='text-primary text-sm font-semibold tracking-[0.3em] uppercase'>Formulir Ditutup</p>
+            <h2 className='text-foreground text-2xl font-semibold leading-snug'>
+              Pendaftaran Sekolah Menyusui.id sudah ditutup
+            </h2>
+            <p className='text-muted-foreground text-sm leading-relaxed'>
+              Terima kasih atas antusiasmenya. Jika Mama ingin mendapatkan informasi ketika batch berikutnya dibuka, silakan hubungi tim kami melalui
+              WhatsApp. Kami akan menghubungi Mama kembali secepatnya.
+            </p>
+          </div>
+          <div className='w-full space-y-2'>
+            <Button asChild size='lg' className='w-full justify-center gap-3 text-base font-semibold'>
+              <a href={config.whatsappLink} target='_blank' rel='noreferrer noopener'>
+                <MessageCircle className='size-5' /> Hubungi Admin via WhatsApp
+              </a>
+            </Button>
+            <p className='text-muted-foreground text-xs'>
+              Tombol akan membuka percakapan WhatsApp baru dengan admin Sekolah Menyusui.
+            </p>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

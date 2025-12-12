@@ -1,10 +1,19 @@
 'use server';
 
-import { desc, eq } from 'drizzle-orm';
-import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import { db } from '~/shared/db';
 import { RegistrationConfig, registrationConfigs } from '~/shared/db/schema';
 import { RegistrationConfigFormSchema, RegistrationConfigFormValues } from '../schema';
+
+export async function getRegistrationConfig(): Promise<RegistrationConfig> {
+  const [config] = await db.select().from(registrationConfigs).limit(1);
+
+  if (!config) {
+    throw new Error('Registration config is not set.');
+  }
+
+  return config;
+}
 
 function normalizeConfigPayload(values: RegistrationConfigFormValues) {
   return {
@@ -13,20 +22,6 @@ function normalizeConfigPayload(values: RegistrationConfigFormValues) {
     whatsappLink: values.whatsappLink.trim(),
     isFormOpen: values.isFormOpen,
   } satisfies Omit<RegistrationConfig, 'id' | 'createdAt' | 'updatedAt'>;
-}
-
-export async function getRegistrationConfigs(): Promise<RegistrationConfig[]> {
-  return await db.select().from(registrationConfigs).orderBy(desc(registrationConfigs.createdAt));
-}
-
-export async function getLatestRegistrationConfig(): Promise<RegistrationConfig | null> {
-  const [config] = await db.select().from(registrationConfigs).orderBy(desc(registrationConfigs.createdAt)).limit(1);
-  return config ?? null;
-}
-
-export async function getRegistrationConfigById(id: string): Promise<RegistrationConfig | null> {
-  const [config] = await db.select().from(registrationConfigs).where(eq(registrationConfigs.id, id)).limit(1);
-  return config ?? null;
 }
 
 export async function saveRegistrationConfig(values: RegistrationConfigFormValues): Promise<RegistrationConfig> {
