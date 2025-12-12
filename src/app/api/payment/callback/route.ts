@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '~/shared/db';
 import { transactions } from '~/shared/db/schema';
-import crypto from 'crypto';
 import { eq } from 'drizzle-orm';
-import { getEnv } from '~/shared/lib/env';
+import { Env, getEnv } from '~/shared/lib/env';
 import { createTransactionLog } from '~/feature/transaction/action';
+import { generateSignature } from '~/shared/lib/doku';
 
 export async function POST(req: NextRequest) {
-  const secretKey = getEnv('DOKU_SECRET_KEY');
+  const secretKey = getEnv(Env.DOKU_SECRET_KEY);
 
-  const rawBody = await req.text();
+  const raw = await req.text();
   const headers = req.headers;
 
   const clientId = headers.get('client-id') ?? '';
@@ -18,38 +18,34 @@ export async function POST(req: NextRequest) {
   const signature = headers.get('signature') ?? '';
   const target = '/api/payment/callback';
 
-  const digest = crypto.createHash('sha256').update(rawBody).digest('base64');
-
-  const components =
-    `Client-Id:${clientId}\n` +
-    `Request-Id:${requestId}\n` +
-    `Request-Timestamp:${timestamp}\n` +
-    `Request-Target:${target}\n` +
-    `Digest:${digest}`;
-
-  const expectedSignature = 'HMACSHA256=' + crypto.createHmac('sha256', secretKey).update(components).digest('base64');
-
-  const signatureValid = signature === expectedSignature;
-
-  if (!signatureValid) {
+  const expectedSignature = generateSignature({
+    body: raw,
+    requestId,
+    timestamp,
+    target,
+    clientId,
+    secretKey,
+  });
+  const isValid = signature === expectedSignature;
+  if (!isValid) {
     console.error('Invalid DOKU signature');
     return NextResponse.json({ message: 'invalid signature' }, { status: 401 });
   }
 
   let body: any;
   try {
-    body = JSON.parse(rawBody);
+    body = JSON.parse(raw);
   } catch {
     return NextResponse.json({ message: 'invalid json' }, { status: 400 });
   }
 
-  const invoiceNumber: string = body?.order?.invoice_number;
+  const invoice: string = body?.order?.invoice_number;
   const status: string = body?.transaction?.status;
-
-  if (!invoiceNumber || !status) {
+  if (!invoice || !status) {
     return NextResponse.json({ message: 'missing fields' }, { status: 400 });
   }
-  const id = invoiceNumber.replace('INV-', '');
+
+  const id = invoice.replace('INV-', '');
 
   await createTransactionLog({
     transactionId: id,
@@ -64,10 +60,11 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  let paymentStatus: 'paid' | 'failed' | 'expired' = 'failed';
-
-  if (status === 'SUCCESS') paymentStatus = 'paid';
-  else if (status === 'EXPIRED') paymentStatus = 'expired';
+  const statusMap: Record<string, 'paid' | 'failed' | 'expired'> = {
+    SUCCESS: 'paid',
+    EXPIRED: 'expired',
+  };
+  const paymentStatus: 'paid' | 'failed' | 'expired' = statusMap[status] ?? 'failed';
 
   await db
     .update(transactions)
@@ -78,13 +75,13 @@ export async function POST(req: NextRequest) {
     })
     .where(eq(transactions.id, id));
 
-  const responsePayload = { message: 'ok' };
+  const payload = { message: 'ok' };
 
   await createTransactionLog({
     transactionId: id,
     type: 'callback_response',
-    payload: responsePayload,
+    payload: payload,
   });
 
-  return NextResponse.json(responsePayload, { status: 200 });
+  return NextResponse.json(payload, { status: 200 });
 }

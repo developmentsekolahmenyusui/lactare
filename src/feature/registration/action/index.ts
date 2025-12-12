@@ -67,12 +67,16 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
   const requestId = ulid();
   const timestamp = new Date().toISOString().slice(0, 19) + 'Z';
   const target = '/checkout/v1/payment';
+  const clientId = getEnv('DOKU_CLIENT_ID');
+  const secretKey = getEnv('DOKU_SECRET_KEY');
 
   const signature = generateSignature({
     body,
     requestId,
     timestamp,
     target,
+    clientId,
+    secretKey,
   });
 
   await createTransactionLog({
@@ -90,7 +94,7 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Client-Id': getEnv('DOKU_CLIENT_ID'),
+      'Client-Id': clientId,
       'Request-Id': requestId,
       'Request-Timestamp': timestamp,
       Signature: signature,
