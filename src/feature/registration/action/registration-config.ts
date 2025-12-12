@@ -1,3 +1,5 @@
+'use server'
+
 import { db } from '~/shared/db';
 import { RegistrationConfig, registrationConfigs } from '~/shared/db/schema';
 
