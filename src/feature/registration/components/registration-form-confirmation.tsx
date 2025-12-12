@@ -9,7 +9,7 @@ type RegistrationFormConfirmationProps = {
 
 export function RegistrationFormConfirmation({ formValues, price }: RegistrationFormConfirmationProps) {
   const formattedPrice = currencyFmt.format(price);
-  
+
   const getDisplayValue = (value?: string | number | null, suffix?: string): string => {
     const isEmptyValue =
       value === undefined || value === null || value === '' || (typeof value === 'number' && Number.isNaN(value));

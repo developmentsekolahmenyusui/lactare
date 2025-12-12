@@ -9,7 +9,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div className="min-h-screen bg-muted/20">
+    <div className='bg-muted/20 min-h-screen'>
       <PrivateNavbar />
       <div>{children}</div>
     </div>

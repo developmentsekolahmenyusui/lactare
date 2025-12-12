@@ -42,7 +42,11 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
     defaultValues: mapConfigToFormValues(initialConfig),
   });
 
-  const { data: config, isLoading: isLoadingConfig, isFetching } = useQuery({
+  const {
+    data: config,
+    isLoading: isLoadingConfig,
+    isFetching,
+  } = useQuery({
     queryKey: ['registration-config'],
     queryFn: () => getRegistrationConfig(),
     initialData: initialConfig,
@@ -82,8 +86,8 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
     latestConfig.updatedAt instanceof Date
       ? latestConfig.updatedAt
       : latestConfig.updatedAt
-      ? new Date(latestConfig.updatedAt)
-      : null;
+        ? new Date(latestConfig.updatedAt)
+        : null;
 
   const handleReset = () => {
     setFeedback(null);
@@ -96,15 +100,17 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
   };
 
   return (
-    <Card className='max-w-5xl w-full mt-6'>
+    <Card className='mt-6 w-full max-w-5xl'>
       <CardHeader className='gap-1.5'>
         <CardTitle>Konfigurasi Pendaftaran</CardTitle>
         <CardDescription>Perbarui informasi batch pendaftaran dan kontrol status formulir.</CardDescription>
-        <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
+        <div className='text-muted-foreground flex flex-wrap items-center gap-2 text-sm'>
           <Badge variant={latestConfig.isFormOpen ? 'default' : 'destructive'}>
             {latestConfig.isFormOpen ? 'Formulir Dibuka' : 'Formulir Ditutup'}
           </Badge>
-          {lastUpdatedAt && <span className='text-xs text-neutral-500'>Diperbarui {dateFmt.format(lastUpdatedAt)}</span>}
+          {lastUpdatedAt && (
+            <span className='text-xs text-neutral-500'>Diperbarui {dateFmt.format(lastUpdatedAt)}</span>
+          )}
         </div>
       </CardHeader>
       <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-6'>
@@ -120,7 +126,7 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
               name='batchTitle'
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className='md:col-span-2 gap-1.5'>
+                <Field data-invalid={fieldState.invalid} className='gap-1.5 md:col-span-2'>
                   <FieldLabel htmlFor='batchTitle'>Nama Batch *</FieldLabel>
                   <Input
                     {...field}

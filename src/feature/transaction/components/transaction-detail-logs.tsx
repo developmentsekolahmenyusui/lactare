@@ -47,9 +47,7 @@ export function TransactionDetailLogs({ logs, isFetching }: TransactionDetailLog
 
                       <div className='space-y-6'>
                         <div className='relative z-10 flex flex-col gap-2'>
-                          <h2 className='text-xl font-semibold tracking-tight text-balance'>
-                            {logsConfig[log.type]}
-                          </h2>
+                          <h2 className='text-xl font-semibold tracking-tight text-balance'>{logsConfig[log.type]}</h2>
                         </div>
                         <div className='prose dark:prose-invert prose-headings:scroll-mt-8 prose-headings:font-semibold prose-a:no-underline prose-headings:tracking-tight prose-headings:text-balance prose-p:tracking-tight prose-p:text-balance max-w-none'>
                           <pre className='mt-3 overflow-auto rounded-md bg-neutral-50 p-3 text-xs text-neutral-800'>

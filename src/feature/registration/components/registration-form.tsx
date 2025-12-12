@@ -99,8 +99,8 @@ export function RegistrationForm({ config }: RegistrationFormProps) {
           }}
         >
           <MultiStepFormContent>
-            <div className='w-full flex flex-row justify-center items-center pb-2 md:pb-4'>
-              <h1 className='text-3xl text-center font-semibold'>{config.batchTitle}</h1>
+            <div className='flex w-full flex-row items-center justify-center pb-2 md:pb-4'>
+              <h1 className='text-center text-3xl font-semibold'>{config.batchTitle}</h1>
             </div>
             <FormHeader />
             <StepFields />
@@ -119,18 +119,18 @@ export function RegistrationForm({ config }: RegistrationFormProps) {
           </MultiStepFormContent>
         </MultiStepFormProvider>
       ) : (
-        <div className='flex flex-col items-center gap-6 rounded-2xl border border-dashed border-muted bg-muted/30 p-6 text-center'>
-          <div className='flex size-20 items-center justify-center rounded-full bg-primary/10 text-primary'>
+        <div className='border-muted bg-muted/30 flex flex-col items-center gap-6 rounded-2xl border border-dashed p-6 text-center'>
+          <div className='bg-primary/10 text-primary flex size-20 items-center justify-center rounded-full'>
             <CalendarX2 className='size-10' />
           </div>
           <div className='space-y-3'>
             <p className='text-primary text-sm font-semibold tracking-[0.3em] uppercase'>Formulir Ditutup</p>
-            <h2 className='text-foreground text-2xl font-semibold leading-snug'>
+            <h2 className='text-foreground text-2xl leading-snug font-semibold'>
               Pendaftaran Sekolah Menyusui.id sudah ditutup
             </h2>
             <p className='text-muted-foreground text-sm leading-relaxed'>
-              Terima kasih atas antusiasmenya. Jika Mama ingin mendapatkan informasi ketika batch berikutnya dibuka, silakan hubungi tim kami melalui
-              WhatsApp. Kami akan menghubungi Mama kembali secepatnya.
+              Terima kasih atas antusiasmenya. Jika Mama ingin mendapatkan informasi ketika batch berikutnya dibuka,
+              silakan hubungi tim kami melalui WhatsApp. Kami akan menghubungi Mama kembali secepatnya.
             </p>
           </div>
           <div className='w-full space-y-2'>

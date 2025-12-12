@@ -20,10 +20,7 @@ export function generateSignature(props: GenerateSignatureProps) {
     `Request-Target:${props.target}\n` +
     `Digest:${digestBase64}`;
 
-  const signatureHmac = crypto
-    .createHmac('sha256', props.secretKey)
-    .update(signatureComponents)
-    .digest('base64');
+  const signatureHmac = crypto.createHmac('sha256', props.secretKey).update(signatureComponents).digest('base64');
 
   return `HMACSHA256=${signatureHmac}`;
 }

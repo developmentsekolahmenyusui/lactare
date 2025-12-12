@@ -81,7 +81,7 @@ export function DataTable<TData, TValue>({
                     ))}
                   </TableRow>
                 ))
-              : Array.from({ length: 20 }).map((_, i) => (
+              : Array.from({ length: 10 }).map((_, i) => (
                   <TableRow key={i} className=''>
                     <TableCell colSpan={columns.length} className='h-10 py-2.5'>
                       <div className='h-full animate-pulse rounded-md bg-neutral-500/10' />
