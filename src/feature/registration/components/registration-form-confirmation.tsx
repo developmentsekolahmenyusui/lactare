@@ -1,11 +1,15 @@
 import { REGISTRATION_INVESTMENT_INFO } from '../constant';
 import { RegistrationSchemaType } from '../schema';
+import { currencyFmt } from '~/shared/lib/format';
 
 type RegistrationFormConfirmationProps = {
   formValues: RegistrationSchemaType;
+  price: number;
 };
 
-export function RegistrationFormConfirmation({ formValues }: RegistrationFormConfirmationProps) {
+export function RegistrationFormConfirmation({ formValues, price }: RegistrationFormConfirmationProps) {
+  const formattedPrice = currencyFmt.format(price);
+  
   const getDisplayValue = (value?: string | number | null, suffix?: string): string => {
     const isEmptyValue =
       value === undefined || value === null || value === '' || (typeof value === 'number' && Number.isNaN(value));
@@ -81,7 +85,7 @@ export function RegistrationFormConfirmation({ formValues }: RegistrationFormCon
           {REGISTRATION_INVESTMENT_INFO.heading}
         </p>
         <div className='mt-2 flex flex-wrap items-end gap-2'>
-          <span className='text-foreground text-3xl leading-none font-bold'>{REGISTRATION_INVESTMENT_INFO.price}</span>
+          <span className='text-foreground text-3xl leading-none font-bold'>{formattedPrice}</span>
           <span className='text-muted-foreground text-sm'>{REGISTRATION_INVESTMENT_INFO.priceNote}</span>
         </div>
         <p className='text-foreground mt-3 text-sm'>{REGISTRATION_INVESTMENT_INFO.description}</p>

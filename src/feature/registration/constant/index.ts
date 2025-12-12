@@ -8,7 +8,6 @@ export const OPENING_BENEFITS = [
 
 export const REGISTRATION_INVESTMENT_INFO = {
   heading: 'Investasi Program',
-  price: 'Rp 169.000',
   priceNote: 'per peserta',
   description: 'Satu kali pembayaran untuk seluruh rangkaian kelas dan konsultasi premium Sekolah Menyusui.',
 } as const;

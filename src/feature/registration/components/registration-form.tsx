@@ -19,8 +19,13 @@ import { RegistrationSchema, RegistrationSchemaType } from '../schema';
 import { RegistrationFormInformation } from './registration-form-information';
 import { RegistrationFormInput } from './registration-form-input';
 import { RegistrationFormConfirmation } from './registration-form-confirmation';
+import { RegistrationConfig } from '~/shared/db/schema';
 
-export function RegistrationForm() {
+type RegistrationFormProps = {
+  config: RegistrationConfig;
+};
+
+export function RegistrationForm({ config }: RegistrationFormProps) {
   const form = useForm<RegistrationSchemaType>({
     resolver: zodResolver(RegistrationSchema as any),
     mode: 'onChange',
@@ -59,7 +64,7 @@ export function RegistrationForm() {
     {
       title: 'Informasi',
       fields: [],
-      component: <RegistrationFormInformation />,
+      component: <RegistrationFormInformation price={config.price} />,
     },
     {
       title: 'Data Peserta',
@@ -69,7 +74,7 @@ export function RegistrationForm() {
     {
       title: 'Konfirmasi',
       fields: [],
-      component: <RegistrationFormConfirmation formValues={formValues} />,
+      component: <RegistrationFormConfirmation formValues={formValues} price={config.price} />,
     },
   ];
 

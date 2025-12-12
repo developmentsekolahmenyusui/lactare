@@ -9,11 +9,12 @@ import { generateSignature } from '~/shared/lib/doku';
 import { getEnv } from '~/shared/lib/env';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
-
-const REGISTRATION_FEE = 169_000;
+import { getRegistrationConfig } from './registration-config';
 
 export async function createTransactionAction(values: RegistrationSchemaType) {
   const payload = RegistrationSchema.parse(values);
+  const registrationConfig = await getRegistrationConfig();
+  const registrationFee = registrationConfig.price;
 
   const [transaction] = await db
     .insert(transactions)
@@ -27,7 +28,7 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
       pregnancyAge: payload.pregnancyAge ?? null,
       childAge: payload.childAge ?? null,
       address: payload.address,
-      amount: REGISTRATION_FEE,
+      amount: registrationFee,
     })
     .returning();
 
@@ -35,7 +36,7 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
 
   const dokuPayload = {
     order: {
-      amount: REGISTRATION_FEE,
+      amount: registrationFee,
       currency: 'IDR',
       invoice_number: invoiceNumber,
     },

@@ -1,7 +1,14 @@
 import { BadgeCheck } from 'lucide-react';
 import { OPENING_BENEFITS, REGISTRATION_INVESTMENT_INFO } from '../constant';
+import { currencyFmt } from '~/shared/lib/format';
 
-export function RegistrationFormInformation() {
+type RegistrationFormInformationProps = {
+  price: number;
+};
+
+export function RegistrationFormInformation({ price }: RegistrationFormInformationProps) {
+  const formattedPrice = currencyFmt.format(price);
+
   return (
     <div className='w-full space-y-4 pb-4'>
       <div className='border-primary/60 bg-primary/5 w-full rounded-xl border p-5 shadow-sm'>
@@ -9,7 +16,7 @@ export function RegistrationFormInformation() {
           {REGISTRATION_INVESTMENT_INFO.heading}
         </p>
         <div className='mt-2 flex flex-wrap items-end gap-2'>
-          <span className='text-foreground text-3xl leading-none font-bold'>{REGISTRATION_INVESTMENT_INFO.price}</span>
+          <span className='text-foreground text-3xl leading-none font-bold'>{formattedPrice}</span>
           <span className='text-muted-foreground text-sm'>{REGISTRATION_INVESTMENT_INFO.priceNote}</span>
         </div>
         <p className='text-foreground mt-3 text-sm'>{REGISTRATION_INVESTMENT_INFO.description}</p>

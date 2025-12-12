@@ -1,11 +1,6 @@
-import { sql } from 'drizzle-orm';
 import { ulid } from 'ulid';
 
-import { customType, index, integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
-
-const tsvector = customType<{ data: string; driverData: string }>({
-  dataType: () => 'tsvector',
-});
+import { boolean, index, integer, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const transactions = pgTable(
   'transactions',
@@ -54,3 +49,20 @@ export const transactionLogs = pgTable(
   (t) => [index('transaction_logs_created_at_idx').on(t.createdAt)],
 );
 export type TransactionLog = typeof transactionLogs.$inferSelect;
+
+export const registrationConfigs = pgTable(
+  'registration_configs',
+  {
+    id: varchar('id', { length: 26 })
+      .$defaultFn(() => ulid())
+      .primaryKey(),
+    batchTitle: varchar('batch_title', { length: 255 }).notNull(),
+    price: integer('price').notNull(),
+    whatsappLink: text('whatsapp_link').notNull(),
+    isFormOpen: boolean('is_form_open').default(true).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index('registration_configs_created_at_idx').on(t.createdAt)],
+);
+export type RegistrationConfig = typeof registrationConfigs.$inferSelect;
