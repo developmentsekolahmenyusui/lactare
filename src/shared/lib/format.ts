@@ -7,10 +7,10 @@ export const currencyFmt = Intl.NumberFormat('id-ID', {
   maximumFractionDigits: 0,
 });
 
-export const dateFmt = new Intl.DateTimeFormat('en-EN', {
-  year: 'numeric',
-  month: '2-digit',
+export const dateFmt = new Intl.DateTimeFormat('en-GB', {
   day: '2-digit',
+  month: '2-digit',
+  year: '2-digit',
   hour: '2-digit',
   minute: '2-digit',
   hour12: false,
