@@ -13,7 +13,7 @@ export function PrivateNavbar() {
   const pathname = usePathname();
 
   return (
-    <nav className='sticky top-0 z-10 flex flex-row items-center justify-center gap-6 border-b bg-white/95 px-6 py-4 text-sm font-medium backdrop-blur'>
+    <nav className='sticky top-0 z-100 flex flex-row items-center justify-center gap-6 border-b px-6 py-4 text-sm font-medium backdrop-blur bg-white'>
       {NAV_ITEMS.map((item) => {
         const isActive = pathname?.startsWith(item.href);
         return (

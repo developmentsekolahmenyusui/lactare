@@ -36,7 +36,7 @@ export function TransactionDetailLogs({ logs, isFetching }: TransactionDetailLog
                 <div key={log.id} className='relative'>
                   <div className='flex flex-col gap-y-2 md:flex-row md:gap-y-6'>
                     <div className='shrink-0 md:w-36'>
-                      <div className='md:sticky md:top-8'>
+                      <div className='md:sticky md:top-20'>
                         <time className='text-muted-foreground mb-3 block text-sm font-medium'>{formattedDate}</time>
                       </div>
                     </div>

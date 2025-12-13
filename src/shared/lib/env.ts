@@ -7,6 +7,7 @@ export const Env = {
   DOKU_CLIENT_ID: 'DOKU_CLIENT_ID',
   DOKU_SECRET_KEY: 'DOKU_SECRET_KEY',
   DOKU_BASE_URL: 'DOKU_BASE_URL',
+  PAYMENT_EXPIRY_API_KEY: 'PAYMENT_EXPIRY_API_KEY',
 } as const;
 
 type EnvKey = (typeof Env)[keyof typeof Env];

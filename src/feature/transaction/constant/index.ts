@@ -22,4 +22,5 @@ export const logsConfig: Record<string, string> = {
   payment_response: 'Payment Response from DOKU',
   callback_request: 'Payment Callback from DOKU',
   callback_response: 'Payment Callback to DOKU',
+  payment_expired: 'Payment Link Expired'
 } as const;
