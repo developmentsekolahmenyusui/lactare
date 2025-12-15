@@ -10,6 +10,8 @@ import { getEnv } from '~/shared/lib/env';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 import { getRegistrationConfig } from '~/feature/registration-confiig/action';
+import { sendEmail } from '~/shared/lib/resend';
+import { paymentLinkEmailTemplate } from '~/shared/template/payment-link.template';
 
 export async function createTransactionAction(values: RegistrationSchemaType) {
   const payload = RegistrationSchema.parse(values);
@@ -135,6 +137,17 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
   }
 
   await db.update(transactions).set({ paymentLink: paymentLink }).where(eq(transactions.id, transaction.id));
+
+  await sendEmail({
+    to: transaction.email,
+    subject: 'Konfirmasi Pembayaran',
+    html: paymentLinkEmailTemplate({
+      fullName: transaction.fullName,
+      totalAmount: transaction.amount,
+      createdAt: transaction.createdAt,
+      paymentLink: paymentLink,
+    }),
+  });
 
   redirect(paymentLink);
 }

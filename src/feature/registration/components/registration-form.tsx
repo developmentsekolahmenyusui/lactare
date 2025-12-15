@@ -33,7 +33,7 @@ export function RegistrationForm({ config }: RegistrationFormProps) {
     reValidateMode: 'onChange',
     defaultValues: {
       fullName: 'dien',
-      email: 'dien@gmail.com',
+      email: 'yananggaa@gmail.com',
       phoneNumber: 81915614444,
       certificateName: 'dien',
       lastEducation: 'S1',

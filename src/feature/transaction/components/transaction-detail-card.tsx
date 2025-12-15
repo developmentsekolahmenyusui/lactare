@@ -32,15 +32,23 @@ export function TransactionDetailCard({ id, transaction }: TransactionDetailCard
         <CardDescription className='text-xs sm:text-sm'>Invoice Number: INV-{id}</CardDescription>
       </CardHeader>
       <CardContent>
-        <dl className='w-full grid gap-4 text-sm sm:grid-cols-2'>
-          <DetailItem label='Full Name' value={transaction?.fullName ?? '-'} copyValue={transaction?.fullName ?? undefined} />
+        <dl className='grid w-full gap-4 text-sm sm:grid-cols-2'>
+          <DetailItem
+            label='Full Name'
+            value={transaction?.fullName ?? '-'}
+            copyValue={transaction?.fullName ?? undefined}
+          />
           <DetailItem
             label='Certificate Name'
             value={transaction?.certificateName ?? '-'}
             copyValue={transaction?.certificateName ?? undefined}
           />
           <DetailItem label='Email' value={transaction?.email ?? '-'} copyValue={transaction?.email ?? undefined} />
-          <DetailItem label='Phone Number' value={transaction?.phoneNumber ?? '-'} copyValue={transaction?.phoneNumber ?? undefined} />
+          <DetailItem
+            label='Phone Number'
+            value={transaction?.phoneNumber ?? '-'}
+            copyValue={transaction?.phoneNumber ?? undefined}
+          />
           <DetailItem
             label='Mother Age'
             value={transaction?.motherAge ?? '-'}
@@ -56,14 +64,26 @@ export function TransactionDetailCard({ id, transaction }: TransactionDetailCard
             value={transaction?.childAge ?? '-'}
             copyValue={transaction?.childAge != null ? transaction.childAge : undefined}
           />
-          <DetailItem label='Last Education' value={transaction?.lastEducation ?? '-'} copyValue={transaction?.lastEducation ?? undefined} />
-          <DetailItem label='Address' value={transaction?.address ?? '-'} copyValue={transaction?.address ?? undefined} />
+          <DetailItem
+            label='Last Education'
+            value={transaction?.lastEducation ?? '-'}
+            copyValue={transaction?.lastEducation ?? undefined}
+          />
+          <DetailItem
+            label='Address'
+            value={transaction?.address ?? '-'}
+            copyValue={transaction?.address ?? undefined}
+          />
           <DetailItem
             label='Amount'
             value={transaction ? currencyFmt.format(transaction.amount) : '-'}
             copyValue={transaction ? currencyFmt.format(transaction.amount) : undefined}
           />
-          <DetailItem label='Payment Link' value={transaction?.paymentLink ?? '-'} copyValue={transaction?.paymentLink ?? undefined} />
+          <DetailItem
+            label='Payment Link'
+            value={transaction?.paymentLink ?? '-'}
+            copyValue={transaction?.paymentLink ?? undefined}
+          />
           <DetailItem label='Payment Date' value={formatDate(transaction?.paymentAt)} />
           <DetailItem label='Created At' value={formatDate(transaction?.createdAt)} />
           <DetailItem label='Updated At' value={formatDate(transaction?.updatedAt)} />
@@ -81,8 +101,7 @@ function DetailItem({ label, value, copyValue }: { label: string; value: ReactNo
     return () => window.clearTimeout(timeoutId);
   }, [copied]);
 
-  const derivedCopyValue =
-    copyValue ?? (typeof value === 'string' || typeof value === 'number' ? value : undefined);
+  const derivedCopyValue = copyValue ?? (typeof value === 'string' || typeof value === 'number' ? value : undefined);
   const textToCopy = derivedCopyValue && derivedCopyValue !== '-' ? String(derivedCopyValue) : '';
 
   const handleCopy = async () => {
@@ -96,7 +115,7 @@ function DetailItem({ label, value, copyValue }: { label: string; value: ReactNo
   };
 
   return (
-    <div className='w-full flex flex-col gap-1 rounded-lg border p-4 overflow-scroll'>
+    <div className='flex w-full flex-col gap-1 overflow-scroll rounded-lg border p-4'>
       <div className='flex items-start justify-between gap-2'>
         <dt className='text-muted-foreground text-xs tracking-wide uppercase'>{label}</dt>
         {textToCopy ? (

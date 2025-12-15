@@ -22,7 +22,7 @@ export function RegistrationPage() {
   if (isLoading) {
     return (
       <div className='flex min-h-svh w-full items-center justify-center'>
-        <div className='flex flex-col items-center gap-3 text-muted-foreground'>
+        <div className='text-muted-foreground flex flex-col items-center gap-3'>
           <Loader2 className='size-6 animate-spin' />
           <p>Menyiapkan formulir pendaftaran...</p>
         </div>
@@ -34,12 +34,12 @@ export function RegistrationPage() {
     return (
       <div className='flex min-h-svh w-full items-center justify-center p-5'>
         <div className='mx-auto flex w-full max-w-lg flex-col items-center gap-4 rounded-lg border bg-white p-8 text-center'>
-          <p className='text-base font-semibold text-foreground'>Gagal memuat konfigurasi pendaftaran.</p>
-          <p className='text-sm text-muted-foreground'>Silakan coba lagi beberapa saat lagi.</p>
+          <p className='text-foreground text-base font-semibold'>Gagal memuat konfigurasi pendaftaran.</p>
+          <p className='text-muted-foreground text-sm'>Silakan coba lagi beberapa saat lagi.</p>
           <Button onClick={() => refetch()} variant='default'>
             Coba Lagi
           </Button>
-          {error instanceof Error && <p className='text-xs text-muted-foreground'>{error.message}</p>}
+          {error instanceof Error && <p className='text-muted-foreground text-xs'>{error.message}</p>}
         </div>
       </div>
     );
