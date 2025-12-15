@@ -92,7 +92,7 @@ export const paymentLinkSuccessTemplate = (params: Params) => {
                         <h2
                           style="margin-top:0rem;margin-bottom:15px;font-size:21px;line-height:1;font-weight:700;color:rgb(12,13,14)">
                           Terima kasih,
-                          <!-- -->eijdiejd<!-- -->. <br />Kami telah menerima
+                          <!-- -->${params.fullName}<!-- -->. <br />Kami telah menerima
                           pembayaran untuk pendaftaran Program Sekolah Menyusui
                         </h2>
                         <p
