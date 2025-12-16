@@ -131,7 +131,7 @@ export const paymentLinkEmailTemplate = (params: Params) => {
                                       [endif]--></span
                                     ><span
                                       style="max-width:100%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:8.25px"
-                                      >Proses Pembayaran</span
+                                      >Lanjutkan Pembayaran</span
                                     ><span
                                       ><!--[if mso
                                         ]><i
