@@ -20,6 +20,7 @@ function normalizeConfigPayload(values: RegistrationConfigFormValues) {
     batchTitle: values.batchTitle.trim(),
     price: values.price,
     whatsappLink: values.whatsappLink.trim(),
+    benefits: values.benefits.map((benefit) => benefit.value.trim()).filter(Boolean),
     isFormOpen: values.isFormOpen,
   } satisfies Omit<RegistrationConfig, 'id' | 'createdAt' | 'updatedAt'>;
 }

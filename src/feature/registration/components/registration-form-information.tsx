@@ -4,10 +4,12 @@ import { currencyFmt } from '~/shared/lib/format';
 
 type RegistrationFormInformationProps = {
   price: number;
+  benefits?: string[];
 };
 
-export function RegistrationFormInformation({ price }: RegistrationFormInformationProps) {
+export function RegistrationFormInformation({ price, benefits }: RegistrationFormInformationProps) {
   const formattedPrice = currencyFmt.format(price);
+  const benefitList = benefits && benefits.length > 0 ? benefits : OPENING_BENEFITS;
 
   return (
     <div className='w-full space-y-4 pb-4'>
@@ -25,7 +27,7 @@ export function RegistrationFormInformation({ price }: RegistrationFormInformati
         Manfaat yang akan Mama dapatkan ketika mengikuti program ini:
       </p>
       <div className='text-foreground w-full space-y-3 text-sm'>
-        {OPENING_BENEFITS.map((benefit) => (
+        {benefitList.map((benefit) => (
           <div key={benefit} className='flex items-start gap-3'>
             <BadgeCheck className='text-primary size-5' />
             <span className='w-full'>{benefit}</span>

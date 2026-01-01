@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { RegistrationConfig } from '~/shared/db/schema';
 import { RegistrationConfigFormSchema, RegistrationConfigFormValues } from '../schema';
 import { saveRegistrationConfig, getRegistrationConfig } from '../action';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/shared/shadcn/card';
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '~/shared/shadcn/field';
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldTitle } from '~/shared/shadcn/field';
 import { Input } from '~/shared/shadcn/input';
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '~/shared/shadcn/input-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/shared/shadcn/select';
@@ -25,6 +25,7 @@ const mapConfigToFormValues = (config: RegistrationConfig): RegistrationConfigFo
   batchTitle: config.batchTitle,
   price: config.price,
   whatsappLink: config.whatsappLink,
+  benefits: (config.benefits ?? []).map((benefit) => ({ value: benefit })),
   isFormOpen: config.isFormOpen,
 });
 
@@ -40,6 +41,15 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
     resolver: zodResolver(RegistrationConfigFormSchema as any),
     mode: 'onBlur',
     defaultValues: mapConfigToFormValues(initialConfig),
+  });
+
+  const {
+    fields: benefitFields,
+    append: appendBenefit,
+    remove: removeBenefit,
+  } = useFieldArray<RegistrationConfigFormValues, 'benefits'>({
+    control: form.control,
+    name: 'benefits',
   });
 
   const {
@@ -223,6 +233,60 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
                 </Field>
               )}
             />
+          </FieldGroup>
+          <FieldGroup>
+            <Field className='gap-2'>
+              <div className='flex flex-wrap items-center justify-between gap-2'>
+                <FieldTitle>Daftar Manfaat</FieldTitle>
+                <Button
+                  type='button'
+                  size='sm'
+                  variant='secondary'
+                  onClick={() => appendBenefit({ value: '' })}
+                  disabled={isBusy}
+                >
+                  <Plus className='size-4' /> Tambah Manfaat
+                </Button>
+              </div>
+              <FieldDescription>Manfaat ditampilkan pada halaman pendaftaran.</FieldDescription>
+              <div className='space-y-3'>
+                {benefitFields.length === 0 ? (
+                  <p className='text-muted-foreground text-sm'>Belum ada manfaat yang ditambahkan.</p>
+                ) : (
+                  benefitFields.map((benefit, index) => (
+                    <Controller
+                      key={benefit.id}
+                      name={`benefits.${index}.value`}
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid} className='gap-1.5'>
+                          <div className='flex items-start gap-2'>
+                            <Input
+                              {...field}
+                              id={`benefit-${benefit.id}`}
+                              type='text'
+                              placeholder={`Manfaat ${index + 1}`}
+                              disabled={isBusy}
+                            />
+                            <Button
+                              type='button'
+                              variant='outline'
+                              size='icon'
+                              onClick={() => removeBenefit(index)}
+                              disabled={isBusy}
+                              aria-label='Hapus manfaat'
+                            >
+                              <Trash2 className='size-4' />
+                            </Button>
+                          </div>
+                          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                        </Field>
+                      )}
+                    />
+                  ))
+                )}
+              </div>
+            </Field>
           </FieldGroup>
         </CardContent>
         <CardFooter className='flex flex-wrap justify-end gap-3 border-t'>

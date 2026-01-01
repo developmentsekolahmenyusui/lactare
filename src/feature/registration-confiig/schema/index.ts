@@ -12,6 +12,13 @@ export const RegistrationConfigFormSchema = z.object({
     .trim()
     .url({ message: 'Masukkan URL WhatsApp yang valid' }),
   isFormOpen: z.coerce.boolean({ error: 'Status formulir wajib dipilih' }),
+  benefits: z
+    .array(
+      z.object({
+        value: z.string().trim().min(1, { message: 'Manfaat wajib diisi' }),
+      }),
+    )
+    .default([]),
 });
 
 export type RegistrationConfigFormValues = z.infer<typeof RegistrationConfigFormSchema>;

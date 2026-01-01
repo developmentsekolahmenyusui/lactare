@@ -56,7 +56,7 @@ export function RegistrationForm({ config }: RegistrationFormProps) {
     {
       title: 'Informasi',
       fields: [],
-      component: <RegistrationFormInformation price={config.price} />,
+      component: <RegistrationFormInformation price={config.price} benefits={config.benefits ?? []} />,
     },
     {
       title: 'Data Peserta',

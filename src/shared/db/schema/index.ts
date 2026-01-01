@@ -59,6 +59,7 @@ export const registrationConfigs = pgTable(
     batchTitle: varchar('batch_title', { length: 255 }).notNull(),
     price: integer('price').notNull(),
     whatsappLink: text('whatsapp_link').notNull(),
+    benefits: jsonb('benefits').$type<string[]>().notNull().default([]),
     isFormOpen: boolean('is_form_open').default(true).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
