@@ -6,7 +6,7 @@ import { db } from '~/shared/db';
 import { transactions } from '~/shared/db/schema';
 import { createTransactionLog } from '~/feature/transaction/action';
 import { generateSignature } from '~/shared/lib/doku';
-import { getEnv } from '~/shared/lib/env';
+import { Env, getEnv } from '~/shared/lib/env';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 import { getRegistrationConfig } from '~/feature/registration-confiig/action';
@@ -56,6 +56,17 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
         'VIRTUAL_ACCOUNT_BTN',
         'VIRTUAL_ACCOUNT_BNC',
         'QRIS',
+        'CREDIT_CARD',
+        'ONLINE_TO_OFFLINE_ALFA',
+        'ONLINE_TO_OFFLINE_INDOMARET',
+        'QRIS',
+        'EMONEY_OVO',
+        'EMONEY_SHOPEE_PAY',
+        'EMONEY_DOKU',
+        'EMONEY_LINKAJA',
+        'EMONEY_DANA',
+        'DIRECT_DEBIT_BRI',
+        'JENIUS_PAY',
       ],
     },
     customer: {
@@ -93,7 +104,7 @@ export async function createTransactionAction(values: RegistrationSchemaType) {
     },
   });
 
-  const res = await fetch(`${getEnv('DOKU_BASE_URL')}${target}`, {
+  const res = await fetch(`${getEnv(Env.DOKU_BASE_URL)}${target}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
