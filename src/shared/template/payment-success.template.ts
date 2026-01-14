@@ -103,7 +103,7 @@ export const paymentLinkSuccessTemplate = (params: Params) => {
                           style="list-style-type:disc;padding-left:1.5rem;font-size:1rem;line-height:1.5;color:rgb(60,63,68)">
                           <li>Nama Pendaftar: <b>${params.fullName}</b></li>
                           <li>Total Harga: <b>${formattedTotalAmount}</b></li>
-                          <li>Waktu Pengisian: <b>${formattedTotalAmount}</b></li>
+                          <li>Waktu Pengisian: <b>${formattedCreatedAt}</b></li>
                           <li>Status Pembayaran: <b>Berhasil</b></li>
                         </ul>
                         <p
