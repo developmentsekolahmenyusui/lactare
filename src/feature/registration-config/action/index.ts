@@ -19,7 +19,8 @@ function normalizeConfigPayload(values: RegistrationConfigFormValues) {
   return {
     batchTitle: values.batchTitle.trim(),
     price: values.price,
-    whatsappLink: values.whatsappLink.trim(),
+    whatsappGroupLink: values.whatsappGroupLink.trim(),
+    whatsappAdminLink: values.whatsappAdminLink.trim(),
     benefits: values.benefits.map((benefit) => benefit.value.trim()).filter(Boolean),
     isFormOpen: values.isFormOpen,
   } satisfies Omit<RegistrationConfig, 'id' | 'createdAt' | 'updatedAt'>;

@@ -7,7 +7,7 @@ import { createTransactionLog } from '~/feature/transaction/action';
 import { generateSignature } from '~/shared/lib/doku';
 import { sendEmail } from '~/shared/lib/resend';
 import { paymentLinkSuccessTemplate } from '~/shared/template/payment-success.template';
-import { getRegistrationConfig } from '~/feature/registration-confiig/action';
+import { getRegistrationConfig } from '~/feature/registration-config/action';
 
 export async function POST(req: NextRequest) {
   const secretKey = getEnv(Env.DOKU_SECRET_KEY);
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
         fullName: transaction.fullName,
         totalAmount: transaction.amount,
         createdAt: transaction.createdAt,
-        whatsappGroup: registrationConfig.whatsappLink,
+        whatsappGroup: registrationConfig.whatsappGroupLink,
       }),
     });
   }

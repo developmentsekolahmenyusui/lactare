@@ -9,7 +9,7 @@ import { generateSignature } from '~/shared/lib/doku';
 import { Env, getEnv } from '~/shared/lib/env';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
-import { getRegistrationConfig } from '~/feature/registration-confiig/action';
+import { getRegistrationConfig } from '~/feature/registration-config/action';
 import { sendEmail } from '~/shared/lib/resend';
 import { paymentLinkEmailTemplate } from '~/shared/template/payment-link.template';
 

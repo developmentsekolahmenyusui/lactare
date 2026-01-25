@@ -24,7 +24,8 @@ const mapConfigToFormValues = (config: RegistrationConfig): RegistrationConfigFo
   id: config.id,
   batchTitle: config.batchTitle,
   price: config.price,
-  whatsappLink: config.whatsappLink,
+  whatsappGroupLink: config.whatsappGroupLink,
+  whatsappAdminLink: config.whatsappAdminLink,
   benefits: (config.benefits ?? []).map((benefit) => ({ value: benefit })),
   isFormOpen: config.isFormOpen,
 });
@@ -185,14 +186,36 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
             />
 
             <Controller
-              name='whatsappLink'
+              name='whatsappGroupLink'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className='gap-1.5 md:col-span-2'>
-                  <FieldLabel htmlFor='whatsappLink'>Link WhatsApp *</FieldLabel>
+                  <FieldLabel htmlFor='whatsappGroupLink'>Link Grup WhatsApp *</FieldLabel>
                   <Input
                     {...field}
-                    id='whatsappLink'
+                    id='whatsappGroupLink'
+                    type='url'
+                    placeholder='https://chat.whatsapp.com/xxxx'
+                    disabled={isBusy}
+                  />
+                  {fieldState.invalid ? (
+                    <FieldError errors={[fieldState.error]} />
+                  ) : (
+                    <FieldDescription>Tautan dikirimkan setelah peserta menyelesaikan pembayaran.</FieldDescription>
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name='whatsappAdminLink'
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className='gap-1.5 md:col-span-2'>
+                  <FieldLabel htmlFor='whatsappAdminLink'>Link WhatsApp Admin *</FieldLabel>
+                  <Input
+                    {...field}
+                    id='whatsappAdminLink'
                     type='url'
                     placeholder='https://wa.me/62xxxx?text=Halo'
                     disabled={isBusy}
@@ -200,7 +223,7 @@ export function RegistrationConfigForm({ initialConfig }: RegistrationConfigForm
                   {fieldState.invalid ? (
                     <FieldError errors={[fieldState.error]} />
                   ) : (
-                    <FieldDescription>Tautan diarahkan pada saat pengguna memerlukan bantuan.</FieldDescription>
+                    <FieldDescription>Tautan diarahkan pada saat formulir pendaftaran ditutup.</FieldDescription>
                   )}
                 </Field>
               )}

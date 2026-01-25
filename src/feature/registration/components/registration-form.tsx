@@ -126,7 +126,7 @@ export function RegistrationForm({ config }: RegistrationFormProps) {
           </div>
           <div className='w-full space-y-2'>
             <Button asChild size='lg' className='w-full justify-center gap-3 text-base font-semibold'>
-              <a href={config.whatsappLink} target='_blank' rel='noreferrer noopener'>
+              <a href={config.whatsappAdminLink} target='_blank' rel='noreferrer noopener'>
                 <MessageCircle className='size-5' /> Hubungi Admin via WhatsApp
               </a>
             </Button>

@@ -7,10 +7,10 @@ export const RegistrationConfigFormSchema = z.object({
     .number({ error: 'Harga tidak valid' })
     .refine((value) => Number.isFinite(value), { message: 'Harga tidak valid' })
     .min(0, { message: 'Harga tidak valid' }),
-  whatsappLink: z
-    .string({ error: 'Link WhatsApp wajib diisi' })
-    .trim()
-    .url({ message: 'Masukkan URL WhatsApp yang valid' }),
+  whatsappGroupLink: z
+    .url({ message: 'Masukkan URL grup WhatsApp yang valid' }),
+  whatsappAdminLink: z
+    .url({ message: 'Masukkan URL WhatsApp admin yang valid' }),
   isFormOpen: z.coerce.boolean({ error: 'Status formulir wajib dipilih' }),
   benefits: z
     .array(

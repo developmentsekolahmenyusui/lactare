@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { Button } from '~/shared/shadcn/button';
 import { RegistrationForm } from '../components/registration-form';
-import { getRegistrationConfig } from '~/feature/registration-confiig/action';
+import { getRegistrationConfig } from '~/feature/registration-config/action';
 
 export function RegistrationPage() {
   const {
